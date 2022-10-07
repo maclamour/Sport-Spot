@@ -31,3 +31,10 @@ Technology Used:
 - PostgreSQL
 - Django REST Framework
 
+
+Wireframe and ERD:
+https://miro.com/welcomeonboard/YWV0MDZpWnZkbGpsUm1hVjJwSExYN0Vaa2xhbTBzY2tHcjdqZHNuTEVVb0JyZXBHd2daMzE2ZTRKalprbDYxcnwzNDU4NzY0NTMzMzc0NjA2NzQ4fDI=?share_link_id=532882361777
+
+
+https://www.figma.com/files/project/63461665
+
