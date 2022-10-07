@@ -33,8 +33,7 @@ Technology Used:
 
 
 Wireframe and ERD:
-https://miro.com/welcomeonboard/YWV0MDZpWnZkbGpsUm1hVjJwSExYN0Vaa2xhbTBzY2tHcjdqZHNuTEVVb0JyZXBHd2daMzE2ZTRKalprbDYxcnwzNDU4NzY0NTMzMzc0NjA2NzQ4fDI=?share_link_id=532882361777
+https://miro.com/app/board/uXjVPP0z3NM=/?share_link_id=951225544806
 
-
-https://www.figma.com/files/project/63461665
+https://www.figma.com/file/IO4gmTcLlXw0rMDUeBn27P/User-Page?node-id=0%3A1
 
