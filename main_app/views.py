@@ -10,3 +10,12 @@ from django.views.generic.base import TemplateView
 # Here we will be creating a class called Home and extending it from the View class
 class Home(TemplateView):
     template_name = "home.html"
+
+class Store:
+    def __init__(self,name,img):
+        self.name = name
+        self.img = img
+
+
+class StoreList(TemplateView):
+    template_name = "store_list.html"
