@@ -1,9 +1,11 @@
+from audioop import reverse
 from django.shortcuts import render
 from django.views import View # <- View class to handle requests
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView
 from .models import Product
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
+from django.urls import reverse
 
 
 
@@ -41,7 +43,9 @@ class StoreCreate(CreateView):
     model = Product
     fields =['name','img','description','price']
     template_name = 'store_create.html'
-    success_url = '/stores'
+    
+    def get_success_url(self):
+        return reverse('store_detail', kwargs={'pk': self.object.pk})
     
 class StoreDetail(DetailView):
     model = Product
@@ -51,4 +55,6 @@ class StoreUpdate(UpdateView):
     model = Product
     fields =['name','img','description','price']
     template_name ='store_update.html'
-    success_url = '/stores'
+    
+    def get_success_url(self):
+        return reverse('store_detail', kwargs={'pk': self.object.pk})
