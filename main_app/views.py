@@ -58,3 +58,8 @@ class StoreUpdate(UpdateView):
     
     def get_success_url(self):
         return reverse('store_detail', kwargs={'pk': self.object.pk})
+
+class StoreDelete(DeleteView):
+    model = Product
+    template_name='store_delete_confirmation.html'
+    success_url= '/stores'
