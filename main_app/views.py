@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views import View # <- View class to handle requests
 from django.views.generic.base import TemplateView
+from django.views.generic import DetailView
 from .models import Product
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
-from django.views.decorators.csrf import requires_csrf_token
+
 
 
 
@@ -42,3 +43,6 @@ class StoreCreate(CreateView):
     template_name = 'store_create.html'
     success_url = '/stores'
     
+class StoreDetail(DetailView):
+    model = Product
+    template_name = 'store_detail.html'
