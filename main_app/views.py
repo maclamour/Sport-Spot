@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.views import View # <- View class to handle requests
-from django.http import HttpResponse # <- a class to handle sending a type of response
-#...
 from django.views.generic.base import TemplateView
 from .models import Product
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView,UpdateView,DeleteView
+from django.views.decorators.csrf import requires_csrf_token
+
 
 
 
@@ -35,8 +35,10 @@ class StoreList(TemplateView):
             context["header"] = "All Available Products"
         return context
 
-    class StoreCreate(CreateView):
-        model = Product
-        fields =['name','img','description','price']
-        template_name = 'store_create.html'
-        success_url = '/stores'
+
+class StoreCreate(CreateView):
+    model = Product
+    fields =['name','img','description','price']
+    template_name = 'store_create.html'
+    success_url = '/stores'
+    
