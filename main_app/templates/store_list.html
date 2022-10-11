@@ -1,37 +1,45 @@
-{%extends 'base.html'%}
-{%load static%}
-{%block content%}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+	<div class="row">
+		<div class="col-lg-4">
+			<img class="thumbnail" src="https://i.imgur.com/EJzAUW5m.jpg">
+			<div class="box-element product">
+				<h6><strong>Product</strong></h6>
+				<hr>
 
+				<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+				<a class="btn btn-outline-success" href="#">View</a>
+				<h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
 
-<div class ='row'>
-    <div class = 'col-lg-4'>
-        <img class ="thumbnail" src = "https://fanatics.frgimages.com/toronto-raptors/mens-mitchell-and-ness-vince-carter-white-toronto-raptors-1997-98-hardwood-classics-swingman-jersey_pi2859000_ff_2859915_full.jpg?_hv=2&w=900">
-        <div class = 'box-element product'>
-        <h2> product</h2>
-        <hr>
-        <button></button>
-    </div>
-</div>
+			</div>
+		</div>
 
-<div class ='row'>
-    <div class = 'col-lg-4'>
-        <img class ="thumbnail" src = "https://fanatics.frgimages.com/orlando-magic/mens-mitchell-and-ness-tracy-mcgrady-blue-orlando-magic-2000-01-hardwood-classics-swingman-jersey_pi2751000_altimages_ff_2751369alt1_full.jpg?_hv=2&w=900">
-        <div class = 'box-element product'>
-        <h2> product</h2>
-        <hr>
-        <button></button>
-    </div>
-</div>
+		<div class="col-lg-4">
+			<img class="thumbnail" src="https://i.imgur.com/5ymSmS6m.jpg">
+			<div class="box-element product">
+				<h6><strong>Product</strong></h6>
+				<hr>
+				
+				<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+				<a class="btn btn-outline-success" href="#">View</a>
+				<h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+				
+			</div>
+		</div>
 
-<div class ='row'>
-    <div class = 'col-lg-4'>
-        <img class ="thumbnail" src = "https://fanatics.frgimages.com/los-angeles-lakers/mens-mitchell-and-ness-kobe-bryant-royal-los-angeles-lakers-1996-97-hardwood-classics-authentic-player-jersey_pi3633000_altimages_ff_3633450-35489f2e237d004eb8dcalt1_full.jpg?_hv=2&w=900">
-        <div class = 'box-element product'>
-        <h2> product</h2>
-        <hr>
-        <button></button>
-    </div>
-</div>
-</div>
+		<div class="col-lg-4">
+			<img class="thumbnail" src="https://i.imgur.com/jV1eioOm.jpg">
+			<div class="box-element product">
+				<h6><strong>Product</strong></h6>
+				<hr>
 
-{%endblock content%}
+				<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+				<a class="btn btn-outline-success" href="#">View</a>
+				<h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
