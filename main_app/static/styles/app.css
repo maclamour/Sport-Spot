@@ -1,5 +1,5 @@
 body{
-	background-color: hsl(0, 0%, 98%);
+	background-color:#B6D0E2;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -8,7 +8,7 @@ h1,h2,h3,h4,h5,h6{
 
 .box-element{
 	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
-	background-color: #fff;
+	background-color: #DCEDC8;
 	border-radius: 4px;
 	padding: 10px;
 }
