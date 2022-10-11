@@ -46,3 +46,9 @@ class StoreCreate(CreateView):
 class StoreDetail(DetailView):
     model = Product
     template_name = 'store_detail.html'
+
+class StoreUpdate(UpdateView):
+    model = Product
+    fields =['name','img','description','price']
+    template_name ='store_update.html'
+    success_url = '/stores'
