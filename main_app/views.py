@@ -4,6 +4,8 @@ from django.http import HttpResponse # <- a class to handle sending a type of re
 #...
 from django.views.generic.base import TemplateView
 from .models import Product
+from django.views.generic.edit import CreateView
+
 
 
 # Create your views here.
@@ -32,3 +34,9 @@ class StoreList(TemplateView):
             context["products"] = Product.objects.all()
             context["header"] = "All Available Products"
         return context
+
+    class StoreCreate(CreateView):
+        model = Product
+        fields =['name','img','description','price']
+        template_name = 'store_create.html'
+        success_url = '/stores'
