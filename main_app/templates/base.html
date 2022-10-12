@@ -35,14 +35,11 @@
 			<span class="navbar-brand" > Welcome Back: {{user.username}}</span>
 			<a href="{% url 'logout' %}"class="btn btn-warning">Logout</a>
 			{% else %}
-	     	<a href="{% url 'login' %}"class="btn btn-warning">Login</a>
-			</hr>
-			 
 			<a href="{% url 'signup' %}"class="btn btn-info">Signup</a>
+			<a href="{% url 'login' %}"class="btn btn-warning">Login</a>
 
 			{% endif %}
 			 
-	     	
 	     	 <a href="">
 	    		<img  id="cart-icon" src="https://i.imgur.com/Rtw4xWxs.png"> 
 	    	</a>
