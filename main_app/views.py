@@ -1,11 +1,12 @@
 from audioop import reverse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import View # <- View class to handle requests
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView
 from .models import Product
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm
 
 
 
@@ -63,3 +64,21 @@ class StoreDelete(DeleteView):
     model = Product
     template_name='store_delete_confirmation.html'
     success_url= '/stores'
+
+
+class Signup(View):
+    # show a form to fill out
+    def get(self, request):
+        form = UserCreationForm()
+        context = {"form": form}
+        return render(request, "registration/signup.html", context)
+    # on form submit, validate the form and login the user.
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("store_list")
+        else:
+            context = {"form": form}
+            return render(request, "signup", context)

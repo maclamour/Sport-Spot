@@ -122,6 +122,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'main_app/static')]
 
+# Add this variable to specify where successful logins should redirect to
+LOGIN_REDIRECT_URL = '/stores/'
+LOGOUT_REDIRECT_URL = '/'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
