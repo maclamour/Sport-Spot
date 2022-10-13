@@ -39,7 +39,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL,blank=True, null=True)
     order_date = models.DateField(auto_now_add=True)
     complated_order = models.BooleanField(default=False)
-    order_id = models.CharField(max_length=100,null=True)
+    order_id = models.CharField(max_length=105,null=True)
 
     def __str__(self):
         return str(self.id)
