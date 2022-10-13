@@ -1,9 +1,11 @@
 from audioop import reverse
+from msilib.schema import CustomAction
+from urllib.request import Request
 from django.shortcuts import render,redirect
 from django.views import View # <- View class to handle requests
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView
-from .models import Product
+from .models import Product, Order
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
@@ -81,5 +83,9 @@ class Signup(View):
             return render(request, "signup", context)
 
 
-class Cart(TemplateView):
-    template_name = "cart.html"
+class Cart():
+    template_name = "cart.html" 
+
+    def cart(self, request):
+        customer = request.user.customer
+        ordercreated = Order.objects.get_or_create(customer=customer, complete=False)
