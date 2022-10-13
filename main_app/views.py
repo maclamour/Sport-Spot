@@ -81,10 +81,5 @@ class Signup(View):
             return render(request, "signup", context)
 
 
-class Cart(View):
-
-    # Here we are adding a method that will be run when we are dealing with a GET request
-    def get(self, request):
-        # Here we are returning a generic response
-        # This is similar to response.send() in express
-        return HttpResponse("Cart")
+class Cart(TemplateView):
+    template_name = "cart.html"
