@@ -7,6 +7,7 @@ from .models import Product
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse
 
 
 
@@ -18,10 +19,6 @@ from django.contrib.auth.forms import UserCreationForm
 class Home(TemplateView):
     template_name = "home.html"
 
-# class Store:
-#     def __init__(self,name,img):
-#         self.name = name
-#         self.img = img
 
 
 class StoreList(TemplateView):
@@ -82,3 +79,12 @@ class Signup(View):
         else:
             context = {"form": form}
             return render(request, "signup", context)
+
+
+class Cart(View):
+
+    # Here we are adding a method that will be run when we are dealing with a GET request
+    def get(self, request):
+        # Here we are returning a generic response
+        # This is similar to response.send() in express
+        return HttpResponse("Cart")
