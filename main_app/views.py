@@ -10,6 +10,7 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
+from django.contrib.auth import login
 
 
 
