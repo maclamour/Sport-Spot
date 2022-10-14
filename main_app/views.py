@@ -1,5 +1,5 @@
 from audioop import reverse
-from msilib.schema import CustomAction
+
 from urllib.request import Request
 from django.shortcuts import render,redirect
 from django.views import View # <- View class to handle requests
@@ -83,7 +83,7 @@ class Signup(View):
             return render(request, "signup", context)
 
 
-class Cart():
+class Cart(View):
     template_name = "cart.html" 
 
     def cart(self, request):
