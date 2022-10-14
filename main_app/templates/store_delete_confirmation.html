@@ -1,4 +1,6 @@
 {% extends 'base.html' %} {% block content %}
+
+
 <h1 class="title pt-5">Are you sure you want to Delete {{product.name}}?</h1>
 <form method="post">
     {% csrf_token %}
@@ -9,4 +11,5 @@
         <a class="button is-primary" href="{% url 'store_detail' product.pk %}">Cancel</a>
     </div>
 </form>
+
 {% endblock %}
