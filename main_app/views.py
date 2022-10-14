@@ -81,7 +81,7 @@ class Signup(View):
             return redirect("store_list")
         else:
             context = {"form": form}
-            return render(request, "signup", context)
+            return render(request, "registration/signup.html", context)
 
 
 class Cart(View):
