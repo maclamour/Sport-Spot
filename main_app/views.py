@@ -88,4 +88,5 @@ class Cart():
 
     def cart(self, request):
         customer = request.user.customer
-        ordercreated = Order.objects.get_or_create(customer=customer, complete=False)
+        order_created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = Order.orderitem_set.all()
