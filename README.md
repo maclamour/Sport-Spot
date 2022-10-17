@@ -26,7 +26,7 @@ Stretch Features:
 Technology Used:
 - Django
 - Python 
-- Bulma
+- Bootstrap
 - Heroku 
 - PostgreSQL
 - Django REST Framework
