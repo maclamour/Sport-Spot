@@ -4,8 +4,12 @@ Heroku Link:
 
 https://sport-spot24.herokuapp.com/
 
-Sport Spot is a e-commerce store that will allow users to view, add, update, and delete different products that are related to all things realted to sports. 
+Sport Spot is a e-commerce store that will allow users to view and purchase different sports products that are available in the store. This website gives customers the opportunity to see all their favorite sports products that are available at the time.
+
+
 The user would have access to all available products they are interested in. This would add a level of customization on their end. 
+
+
 For this only an admin can access the product list in terms of adding, deleting, editing, and 
 
 One - One: User and account
