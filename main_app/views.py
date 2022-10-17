@@ -91,3 +91,6 @@ class Cart(View):
         customer = request.user.customer
         order_created = Order.objects.get_or_create(customer=customer, complete=False)
         items = Order.orderitem_set.all()
+        cartitems = Order.get_cart_items
+
+        context = {"order_created": order_created, "items": items, "cartitems": cartitems}
