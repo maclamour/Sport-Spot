@@ -3,7 +3,7 @@
 Sport Spot is a e-commerce store that will allow users to view, add, update, and delete different products that are related to all things realted to sports. 
 The user would have access to their own library of products they are interested in. This would add a level of customization on their end. 
 
-One - One: User and profile 
+One - One: User and account
 One - Many: User and products 
 Many- Many: Products and Categories
 
