@@ -20,8 +20,8 @@ Many- Many: Products and Categories
 
 MVP:
 
-- Create a site that allows users to easily have full curd functionally such as GET, PUT, UPDATE, DELETE 
-- User signups would be the way one has access to the site 
+- Create a site that allows admin to easily have full curd functionally such as GET, PUT, UPDATE, DELETE 
+- User signups so that every user has their own access to the site
 - The ability to browse different products on the site with various categories 
 - Setting up the admin site to help manage the users and products 
 
