@@ -16,7 +16,7 @@ MVP:
 - The ability to browse different products on the site with various categories 
 - Setting up the admin site to help manage the users and products 
 
-Stretch Features:
+Future Features:
 
 - Having a cart where users are able to add their favorite items to 
 - Setting up a invetory system that will track how items in a category is available to the user 
