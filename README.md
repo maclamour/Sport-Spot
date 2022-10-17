@@ -1,7 +1,11 @@
 # Sport-Spot
 
+Heroku Link: 
+
+https://sport-spot24.herokuapp.com/
+
 Sport Spot is a e-commerce store that will allow users to view, add, update, and delete different products that are related to all things realted to sports. 
-The user would have access to their own library of products they are interested in. This would add a level of customization on their end. 
+The user would have access to all available products they are interested in. This would add a level of customization on their end. 
 
 One - One: User and account
 One - Many: User and products 
@@ -29,11 +33,38 @@ Technology Used:
 - Bootstrap
 - Heroku 
 - PostgreSQL
-- Django REST Framework
+
+Code Snippets:
+
+Home Page: 
+
+![Screen Shot 2022-10-17 at 8 50 07 AM](https://user-images.githubusercontent.com/16377912/196182129-40785a85-15d4-4d71-b6ca-f24bc22903a1.png)
+
+Store Page: 
+
+![Screen Shot 2022-10-17 at 8 50 21 AM](https://user-images.githubusercontent.com/16377912/196182206-07900563-2a8c-4a3d-8b6d-6f08df1a7120.png)
+
+Add Product: 
+![Screen Shot 2022-10-17 at 8 51 02 AM](https://user-images.githubusercontent.com/16377912/196182368-6071dc60-3340-4b43-bfe6-c00cb0258e01.png)
+
+
+Delete Product: 
+
+![Screen Shot 2022-10-17 at 8 50 43 AM](https://user-images.githubusercontent.com/16377912/196182253-5da8b0b0-a109-4f13-b60c-25691d03d165.png)
+
+Challenging code: 
+
+Tried to get the images and dynamic informartion to show up on the cart page but was not able to figure it. This is something I can try to work on in the furture, this would be an aewsome feature to help complete the user experience. 
+
+![Screen Shot 2022-10-17 at 8 49 36 AM](https://user-images.githubusercontent.com/16377912/196182561-da02a323-77cb-4617-b30b-c580223aee7c.png)
+
+
 
 
 Wireframe and ERD:
 https://miro.com/app/board/uXjVPP0z3NM=/?share_link_id=951225544806
 
 https://www.figma.com/file/IO4gmTcLlXw0rMDUeBn27P/User-Page?node-id=0%3A1
+
+
 
