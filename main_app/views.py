@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 
 
 
@@ -84,7 +85,7 @@ class Signup(View):
             return render(request, "registration/signup.html", context)
 
 
-class Cart(View):
+class Cart(TemplateView):
     template_name = "cart.html" 
 
     def cart(self, request):
@@ -94,3 +95,4 @@ class Cart(View):
         cartitems = Order.get_cart_items
 
         context = {"order_created": order_created, "items": items, "cartitems": cartitems}
+        return render(request, "cart.html", context)
