@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -192,3 +193,51 @@ class CheckoutView(View):
 
         # Handle GET requests or invalid form submissions
         return render(request, 'checkout.html')  # Render the checkout page if needed
+    
+
+def process_order(request):
+    if request.method == 'POST':
+        # Retrieve customer information and order details from the form
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+
+        # Create a new Order record in your database
+        order = Order.objects.create(
+            customer=request.user.customer,
+            name=name,
+            email=email,
+            address=address,
+            completed_order=True,  # Mark the order as completed
+            # ... other order fields ...
+        )
+
+        # Transfer items from the user's cart to the order
+        # Retrieve the user's cart using the custom manager
+        user_cart = Cart.objects.get_cart_for_user(request.user)
+        order_items = user_cart.order_items.all()
+        for cart_item in order_items:
+            OrderItem.objects.create(
+                product=cart_item.product,
+                order=order,
+                quantity=cart_item.quantity,
+            )
+
+        # Clear the user's cart
+        user_cart.order_items.clear()
+
+        # Send a confirmation email to the customer
+        subject = 'Order Confirmation'
+        message = 'Thank you for your order! Your order has been received and will be processed shortly.'
+        from_email = 'your_email@example.com'  # Replace with your email address
+        recipient_list = [email]  # Use the customer's email address
+        send_mail(subject, message, from_email, recipient_list)
+
+        # Optionally, you can display a success message to the user
+        messages.success(request, 'Your order has been placed successfully.')
+
+        # Redirect the user to a thank-you page or another relevant page
+        return redirect('home')
+    else:
+        # Handle GET requests or invalid form submissions
+        return render(request, 'checkout.html')

@@ -50,9 +50,16 @@ class OrderItem(models.Model):
         return self.quantity * self.product.price
 
 
+class CartManager(models.Manager):
+    def get_cart_for_user(self, user):
+        return self.get(user=user)
+
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_items = models.ManyToManyField('OrderItem', related_name='carts')
+
+    # Define a custom manager
+    objects = CartManager()
 
     def __str__(self):
         return f"Cart for {self.user.username}"
