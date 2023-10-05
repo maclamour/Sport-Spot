@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from django.views.generic.base import TemplateView
-from django.views.generic import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from .models import Product, Order, OrderItem, Cart  # Import necessary models
+from django.contrib import messages
 from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from .models import Product, Order, OrderItem, Cart
 
 class Home(TemplateView):
     template_name = "home.html"
@@ -104,24 +106,91 @@ def add_to_cart(request, product_id):
         order_item.quantity += 1
         order_item.save()
 
-    return redirect('store_list')
+    return redirect('cart')
+
 
 
 def update_cart(request, item_id, new_quantity):
-    cart_item = OrderItem.objects.get(pk=item_id)
+    try:
+        cart_item = OrderItem.objects.get(pk=item_id)
+        cart_item.quantity = new_quantity
+        cart_item.save()
 
-    cart_item.quantity = new_quantity
-    cart_item.save()
+        cart = cart_item.order
+        cart_item_count = cart.orderitem_set.aggregate(cart_item_count=models.Sum('quantity'))['cart_item_count']
+        cart_total_price = cart.total_price()
 
-    total_price = cart_item.total_price()
+        return JsonResponse({
+            'quantity': new_quantity,
+            'total_price': cart_item.total_price(),
+            'cart_item_count': cart_item_count,
+            'cart_total_price': cart_total_price
+        })
+    except OrderItem.DoesNotExist:
+        return JsonResponse({'error': 'Item not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
-    cart = Order.objects.get(pk=cart_item.order.id)
-    cart_item_count = cart.orderitem_set.aggregate(cart_item_count=models.Sum('quantity'))['cart_item_count']
-    cart_total_price = cart.total_price()
 
-    return JsonResponse({
-        'quantity': new_quantity,
-        'total_price': total_price,
-        'cart_item_count': cart_item_count,
-        'cart_total_price': cart_total_price
-    })
+@method_decorator(login_required, name='dispatch')  # Require login for this view
+class CheckoutView(View):
+    template_name = "checkout.html"
+
+    def get(self, request):
+        # Retrieve the user's cart and associated items
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
+        cartitems = order.orderitem_set.all()
+
+        # Calculate the total price for the order
+        cart_total_price = order.total_price()
+
+        context = {
+            'cartitems': cartitems,
+            'cart_total_price': cart_total_price,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        # Handle order processing here (as shown in the previous response)
+        if request.method == 'POST':
+            # Retrieve customer information and order details from the form
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            address = request.POST.get('address')
+            # ... other form fields ...
+
+            # Create a new Order record in your database
+            order = Order.objects.create(
+                customer=request.user.customer,
+                name=name,
+                email=email,
+                address=address,
+                completed_order=True,  # Mark the order as completed
+                # ... other order fields ...
+            )
+
+            # Transfer items from the user's cart to the order
+            user_cart = Cart.objects.get(user=request.user)
+            order_items = user_cart.order_items.all()
+            for cart_item in order_items:
+                OrderItem.objects.create(
+                    product=cart_item.product,
+                    order=order,
+                    quantity=cart_item.quantity,
+                )
+
+            # Clear the user's cart
+            user_cart.order_items.clear()
+
+            # Handle any additional actions related to order processing
+            # ...
+
+            # Optionally, you can display a success message to the user
+            messages.success(request, 'Your order has been placed successfully.')
+
+            # Redirect the user to a thank-you page or another relevant page
+            return redirect('thank_you')
+
+        # Handle GET requests or invalid form submissions
+        return render(request, 'checkout.html')  # Render the checkout page if needed

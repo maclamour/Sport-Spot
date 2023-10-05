@@ -28,9 +28,13 @@ class Order(models.Model):
     order_date = models.DateField(auto_now_add=True)
     completed_order = models.BooleanField(default=False)
     order_id = models.CharField(max_length=105, null=True)
+    name = models.CharField(max_length=255, null=True)  # Add this field
+    email = models.EmailField(null=True)  # Add this field
+    address = models.TextField(null=True)  # Add this field
 
     def __str__(self):
         return str(self.id)
+
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
@@ -43,6 +47,7 @@ class OrderItem(models.Model):
 
     def total_price(self):
         return self.quantity * self.product.price
+
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
