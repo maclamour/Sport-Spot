@@ -7,14 +7,14 @@
 <form class="mb-5" method="get">
     <div class="field has-addons">
         <div class="control">
-            <!--  Our input will search by the name of the artist  -->
+            <!-- Our input will search by the name of the artist -->
             <input class="input" type="text" name="name" placeholder="name" />
         </div>
         <div class="control">
             <input class="button is-success" type="submit" value="Search" />
         </div>
     </div>
-    <!--  This anchor tag will redirect back to the artist list without a query param -->
+    <!-- This anchor tag will redirect back to the artist list without a query param -->
     <a class="button is-dark" href="{% url 'store_list' %}">Clear Search</a>
     {% if user.is_superuser %}
     <a class="button is-dark" href="{% url 'store_create' %}">Add Product</a>
@@ -31,7 +31,7 @@
                 <p>{{ product.description }}</p>
                 <hr>
 
-                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                <button class="btn btn-outline-secondary add-btn" data-product-id="{{ product.pk }}">Add to Cart</button>
                 <a class="btn btn-outline-success" href="{% url 'store_detail' product.pk %}">View</a>
                 <h4 style="display: inline-block; float: right"><strong>${{ product.price }}</strong></h4>
             </div>
@@ -60,51 +60,38 @@
     }
 </style>
 
+<script>
+    // JavaScript to handle adding items to the cart
+    document.addEventListener('DOMContentLoaded', function () {
+        const addButtons = document.querySelectorAll('.add-btn');
+        addButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
+                addToCart(productId);
+            });
+        });
+
+        function addToCart(productId) {
+            // Make an AJAX request to add the product to the cart
+            fetch(`/add_to_cart/${productId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response, e.g., update the cart count
+                    updateCartCount(data.cart_items_count);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function updateCartCount(count) {
+            // Update the cart count in your UI
+            const cartCountElement = document.getElementById('cart-total');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        }
+    });
+</script>
+
 {% endblock content %}
-
-
-{% comment %} {% extends 'base.html' %}
-{% load static %}
-{% block content %}
-
-<h1 class="title">{{header}}</h1>
-
-
-<form class="mb-5" method="get">
-	<div class="field has-addons">
-	  <div class="control">
-		<!--  Our input will search by name of artist  -->
-		<input class="input" type="text" name="name" placeholder="name" />
-	  </div>
-	  <div class="control">
-		<input class="button is-success" type="submit" value="Search" />
-	  </div>
-	</div>
-	<!--  This anchor tag will redirect back to artist list without a query param -->
-	<a class="button is-dark" href="{% url 'store_list' %}">Clear Search</a>
-	{% if user.is_superuser %}
-	<a class="button is-dark" href="{% url 'store_create' %}">Add Product</a>
-	{% else %}
-        {% endif %}
-  </form>
-
-
-	<div class="row">
-    {%for product in products%}
-		<div class="col-lg-4">
-			<img src="{{ product.img_url }}" alt="{{ product.name }}">
-			<div class="box-element product">
-				<h6><strong>{{product.name}}</strong></h6>
-				<p>{{product.description}}</p>
-				<hr>
-
-				<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
-				<a class="btn btn-outline-success" href="{% url 'store_detail' product.pk %}">View</a>
-				<h4 style="display: inline-block; float: right"><strong>${{product.price}}</strong></h4>
-
-			</div>
-		</div>
-    {% endfor %}
-	</div>
-
-{% endblock content %} {% endcomment %}

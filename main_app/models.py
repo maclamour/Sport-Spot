@@ -37,3 +37,19 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+    def total_price(self):
+        return self.quantity * self.product.price
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_items = models.ManyToManyField(OrderItem)
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
+
+    def total_price(self):
+        return sum(item.total_price() for item in self.order_items.all())
