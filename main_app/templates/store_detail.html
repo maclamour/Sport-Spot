@@ -1,31 +1,22 @@
-{% extends 'base.html' %} 
-{% block content %}
-<div class="detail__img">
-    <img src="{{product.imgUrl}}" alt="{{product.name}}" />
-</div>
+{% extends 'base.html' %}
 
-    <h1 class="title">{{product.name}}</h1>
-</div>
+{% block content %}
 <div class="detail__container">
+    <div class="detail__img">
+        <img src="{{ product.img_url }}" alt="{{ product.name }}"/>
+    </div>
+
+    <h1 class="title">{{ product.name }}</h1>
+
     <div class="buttons">
         {% if user.is_superuser %}
         <a href="{% url 'store_update' product.pk %}" class="button is-info">
             <span class="icon">
                 <i class="fas fa-edit"></i>
             </span>
+            Edit Product
         </a>
-        <a href="/stores/{{product.id}}/delete" class="button is-danger">
-            <span class="icon">
-                <i class="fas fa-trash-alt"></i>
-            </span>
-        </a>
-        {% else %}
         {% endif %}
     </div>
-    <div class="detail__about">
-        <h4 class="title is-4">Description</h4>
-        <p>{{product.description}}</p>
-    </div>
 </div>
-
 {% endblock %}

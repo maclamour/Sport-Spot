@@ -2,6 +2,71 @@
 {% load static %}
 {% block content %}
 
+<h1 class="title">{{ header }}</h1>
+
+<form class="mb-5" method="get">
+    <div class="field has-addons">
+        <div class="control">
+            <!--  Our input will search by the name of the artist  -->
+            <input class="input" type="text" name="name" placeholder="name" />
+        </div>
+        <div class="control">
+            <input class="button is-success" type="submit" value="Search" />
+        </div>
+    </div>
+    <!--  This anchor tag will redirect back to the artist list without a query param -->
+    <a class="button is-dark" href="{% url 'store_list' %}">Clear Search</a>
+    {% if user.is_superuser %}
+    <a class="button is-dark" href="{% url 'store_create' %}">Add Product</a>
+    {% endif %}
+</form>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-lg-4">
+        <div class="product-card">
+            <img src="{{ product.img_url }}" alt="{{ product.name }}">
+            <div class="box-element product">
+                <h6><strong>{{ product.name }}</strong></h6>
+                <p>{{ product.description }}</p>
+                <hr>
+
+                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                <a class="btn btn-outline-success" href="{% url 'store_detail' product.pk %}">View</a>
+                <h4 style="display: inline-block; float: right"><strong>${{ product.price }}</strong></h4>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    /* Custom CSS for the 3x3 grid */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .col-lg-4 {
+        width: calc(33.33% - 20px); /* 33.33% width with a small margin in between */
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* Add additional styling for product cards as needed */
+    .product-card {
+        /* Add styles for the product card here */
+    }
+</style>
+
+{% endblock content %}
+
+
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
 <h1 class="title">{{header}}</h1>
 
 
@@ -27,7 +92,7 @@
 	<div class="row">
     {%for product in products%}
 		<div class="col-lg-4">
-			<img class="thumbnail" src="{{product.imgUrl}}">
+			<img src="{{ product.img_url }}" alt="{{ product.name }}">
 			<div class="box-element product">
 				<h6><strong>{{product.name}}</strong></h6>
 				<p>{{product.description}}</p>
@@ -42,4 +107,4 @@
     {% endfor %}
 	</div>
 
-{% endblock content %}
+{% endblock content %} {% endcomment %}
