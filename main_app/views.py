@@ -131,8 +131,7 @@ def update_cart(request, item_id, new_quantity):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-
-@method_decorator(login_required, name='dispatch')  # Require login for this view
+@method_decorator(login_required, name='dispatch')
 class CheckoutView(View):
     template_name = "checkout.html"
 
@@ -143,7 +142,7 @@ class CheckoutView(View):
         cartitems = order.orderitem_set.all()
 
         # Calculate the total price for the order
-        cart_total_price = order.total_price()
+        cart_total_price = sum(item.total_price() for item in cartitems)
 
         context = {
             'cartitems': cartitems,
@@ -152,7 +151,6 @@ class CheckoutView(View):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        # Handle order processing here (as shown in the previous response)
         if request.method == 'POST':
             # Retrieve customer information and order details from the form
             name = request.POST.get('name')
