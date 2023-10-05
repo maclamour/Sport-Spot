@@ -98,11 +98,15 @@ class Cart(TemplateView):
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     user = request.user
-    cart, created = Cart.objects.get_or_create(user=user)
 
-    # Check if the product is already in the cart, and if so, update the quantity
-    order_item, created = OrderItem.objects.get_or_create(product=product, order=cart, defaults={'quantity': 0})
-    order_item.quantity += 1
-    order_item.save()
+    if user.is_authenticated:
+        customer = user.customer
+        # Use the correct field name 'completed_order'
+        order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
+        
+        # Check if the product is already in the cart, and if so, update the quantity
+        order_item, created = OrderItem.objects.get_or_create(product=product, order=order, defaults={'quantity': 0})
+        order_item.quantity += 1
+        order_item.save()
 
     return redirect('store_list')  # Redirect to the product list page after adding to cart
