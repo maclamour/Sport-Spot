@@ -28,12 +28,8 @@ class Product(models.Model):
         return self.name
     
     @property
-    def imgUrl(self):
-        try:
-            url=self.img.url
-        except:
-            url=''
-        return url    
+    def img_url(self):
+        return self.img_url if self.img else ''  
         
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL,blank=True, null=True)
