@@ -9,8 +9,8 @@
             <br>
             <table class="table">
                 <tr>
-                    <th><h5>Items: <strong>{{ cart.items.count }}</strong></h5></th>
-                    <th><h5>Total: <strong>${{ cart_total }}</strong></h5></th>
+                    <th><h5>Items: <strong>{{ cartitems.count }}</strong></h5></th>
+                    <th><h5>Total: <strong>${{ cart.total_price }}</strong></h5></th>
                     <th>
                         <a style="float:right; margin:5px;" class="btn btn-success" href="">Checkout</a>
                     </th>
@@ -26,7 +26,7 @@
                 <div style="flex:1"><strong>Quantity</strong></div>
                 <div style="flex:1"><strong>Total</strong></div>
             </div>
-            {% for item in cart.items.all %}
+            {% for item in cartitems %}
             <div class="cart-row">
                 <div style="flex:2"><img class="row-image" src="{{ item.product.img_url }}"></div>
                 <div style="flex:2"><p>{{ item.product.name }}</p></div>
@@ -38,7 +38,7 @@
                         <img class="chg-quantity" src="https://i.imgur.com/ODXVK7Bs.jpg">
                     </div>
                 </div>
-                <div style="flex:1"><p>${{ item.quantity|mul:item.product.price }}</p></div>
+                <div style="flex:1"><p>${{ item.total_price }}</p></div>
             </div>
             {% endfor %}
         </div>

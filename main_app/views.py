@@ -67,20 +67,32 @@ class Signup(View):
             context = {"form": form}
             return render(request, "registration/signup.html", context)
 
+from django.views.generic import TemplateView
+from .models import Order, OrderItem
+
 class Cart(TemplateView):
     template_name = "cart.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        customer = self.request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartitems = order.get_cart_items()
+        
+        if self.request.user.is_authenticated:
+            customer = self.request.user.customer
+            # Use the correct field name 'completed_order'
+            order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
+            items = order.orderitem_set.all()
+            cartitems = order.orderitem_set.all()  # Assuming this is the correct way to get cart items
+            
+            context["order_created"] = order
+            context["items"] = items
+            context["cartitems"] = cartitems
+        else:
+            context["order_created"] = None
+            context["items"] = []
+            context["cartitems"] = []
 
-        context["order_created"] = order
-        context["items"] = items
-        context["cartitems"] = cartitems
         return context
+
 
 # Update the view for adding items to the cart
 def add_to_cart(request, product_id):
