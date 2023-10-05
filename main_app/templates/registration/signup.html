@@ -1,10 +1,47 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
 
+{% block content %}
 <h1 class="title">Sign Up</h1>
 <form method="post" action="{% url 'signup' %}">
-    {% csrf_token %} {{ form.as_p }}
+    {% csrf_token %}
+    
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    <br>
+    
+    {{ form.password1.label_tag }}
+    {{ form.password1 }}
+    <br>
+    
+    {{ form.password2.label_tag }}
+    {{ form.password2 }}
+    <br>
+    
+    {% if request.user.is_anonymous %}
+    {{ form.email.label_tag }}
+    {{ form.email }}
+    <br>
+    {% endif %}
+    
+    {% if request.user.is_anonymous %}
+    {{ form.first_name.label_tag }}
+    {{ form.first_name }}
+    <br>
+    
+    {{ form.last_name.label_tag }}
+    {{ form.last_name }}
+    <br>
+    {% endif %}
+    
+    {% with request.user.customer as user_customer %}
+        {% if user_customer %}
+            {{ form.user_profile.name.label_tag }}
+            {{ form.user_profile.name }}
+            <br>
+        {% endif %}
+    {% endwith %}
+    
     <input type="submit" class="btn" value="Sign Up" />
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
 {% endblock %}

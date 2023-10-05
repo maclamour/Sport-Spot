@@ -42,6 +42,14 @@
             </div>
             {% endfor %}
         </div>
+        <br>
+        {% if request.user.customer %}
+        <div class="box-element">
+            <h5>Customer Information:</h5>
+            <p><strong>Name:</strong> {{ request.user.customer.name }}</p>
+            <p><strong>Email:</strong> {{ request.user.customer.email }}</p>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

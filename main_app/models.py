@@ -46,7 +46,7 @@ class OrderItem(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_items = models.ManyToManyField(OrderItem)
+    order_items = models.ManyToManyField('OrderItem', related_name='carts')
 
     def __str__(self):
         return f"Cart for {self.user.username}"
