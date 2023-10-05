@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .models import Product, Order, OrderItem, Cart  # Import necessary models
+from django.http import JsonResponse
 
 class Home(TemplateView):
     template_name = "home.html"
@@ -67,22 +68,19 @@ class Signup(View):
             context = {"form": form}
             return render(request, "registration/signup.html", context)
 
-from django.views.generic import TemplateView
-from .models import Order, OrderItem
 
 class Cart(TemplateView):
     template_name = "cart.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         if self.request.user.is_authenticated:
             customer = self.request.user.customer
-            # Use the correct field name 'completed_order'
             order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
             items = order.orderitem_set.all()
-            cartitems = order.orderitem_set.all()  # Assuming this is the correct way to get cart items
-            
+            cartitems = order.orderitem_set.all()
+
             context["order_created"] = order
             context["items"] = items
             context["cartitems"] = cartitems
@@ -94,19 +92,36 @@ class Cart(TemplateView):
         return context
 
 
-# Update the view for adding items to the cart
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     user = request.user
 
     if user.is_authenticated:
         customer = user.customer
-        # Use the correct field name 'completed_order'
         order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
-        
-        # Check if the product is already in the cart, and if so, update the quantity
+
         order_item, created = OrderItem.objects.get_or_create(product=product, order=order, defaults={'quantity': 0})
         order_item.quantity += 1
         order_item.save()
 
-    return redirect('store_list')  # Redirect to the product list page after adding to cart
+    return redirect('store_list')
+
+
+def update_cart(request, item_id, new_quantity):
+    cart_item = OrderItem.objects.get(pk=item_id)
+
+    cart_item.quantity = new_quantity
+    cart_item.save()
+
+    total_price = cart_item.total_price()
+
+    cart = Order.objects.get(pk=cart_item.order.id)
+    cart_item_count = cart.orderitem_set.aggregate(cart_item_count=models.Sum('quantity'))['cart_item_count']
+    cart_total_price = cart.total_price()
+
+    return JsonResponse({
+        'quantity': new_quantity,
+        'total_price': total_price,
+        'cart_item_count': cart_item_count,
+        'cart_total_price': cart_total_price
+    })
