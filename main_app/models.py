@@ -66,3 +66,14 @@ class Cart(models.Model):
 
     def total_price(self):
         return sum(item.total_price() for item in self.order_items.all())
+    
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    # Add any additional fields you need, e.g., selected options or custom fields
+
+    def __str__(self):
+        return f"CartItem for {self.product.name}"
+
+    def total_price(self):
+        return self.product.price * self.quantity

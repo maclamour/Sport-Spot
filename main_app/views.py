@@ -11,6 +11,7 @@ from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .models import Product, Order, OrderItem, Cart
+from django.core.exceptions import ObjectDoesNotExist
 
 class Home(TemplateView):
     template_name = "home.html"
@@ -81,19 +82,15 @@ class Cart(TemplateView):
         if self.request.user.is_authenticated:
             customer = self.request.user.customer
             order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
-            items = order.orderitem_set.all()
-            cartitems = order.orderitem_set.all()
+            cartitems = order.orderitem_set.all()  # Use the OrderItem model instead of Order
 
             context["order_created"] = order
-            context["items"] = items
-            context["cartitems"] = cartitems
+            context["cartitems"] = cartitems  # Update the context variable
         else:
             context["order_created"] = None
-            context["items"] = []
             context["cartitems"] = []
 
         return context
-
 
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -103,6 +100,7 @@ def add_to_cart(request, product_id):
         customer = user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
 
+        # Use the OrderItem model instead of OrderItem
         order_item, created = OrderItem.objects.get_or_create(product=product, order=order, defaults={'quantity': 0})
         order_item.quantity += 1
         order_item.save()
@@ -195,49 +193,61 @@ class CheckoutView(View):
         return render(request, 'checkout.html')  # Render the checkout page if needed
     
 
+
 def process_order(request):
     if request.method == 'POST':
-        # Retrieve customer information and order details from the form
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        address = request.POST.get('address')
+        try:
+            # Retrieve customer information and order details from the form
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            address = request.POST.get('address')
 
-        # Create a new Order record in your database
-        order = Order.objects.create(
-            customer=request.user.customer,
-            name=name,
-            email=email,
-            address=address,
-            completed_order=True,  # Mark the order as completed
-            # ... other order fields ...
-        )
-
-        # Transfer items from the user's cart to the order
-        # Retrieve the user's cart using the custom manager
-        user_cart = Cart.objects.get_cart_for_user(request.user)
-        order_items = user_cart.order_items.all()
-        for cart_item in order_items:
-            OrderItem.objects.create(
-                product=cart_item.product,
-                order=order,
-                quantity=cart_item.quantity,
+            # Create a new Order record in your database
+            order = Order.objects.create(
+                customer=request.user.customer,
+                name=name,
+                email=email,
+                address=address,
+                completed_order=True,  # Mark the order as completed
+                # ... other order fields ...
             )
 
-        # Clear the user's cart
-        user_cart.order_items.clear()
+            # Transfer items from the user's cart to the order
+            # Retrieve the user's cart using the custom manager
+            user_cart = Cart.objects.get_cart_for_user(request.user)
+            order_items = user_cart.order_items.all()
+            for cart_item in order_items:
+                OrderItem.objects.create(
+                    product=cart_item.product,
+                    order=order,
+                    quantity=cart_item.quantity,
+                )
 
-        # Send a confirmation email to the customer
-        subject = 'Order Confirmation'
-        message = 'Thank you for your order! Your order has been received and will be processed shortly.'
-        from_email = 'your_email@example.com'  # Replace with your email address
-        recipient_list = [email]  # Use the customer's email address
-        send_mail(subject, message, from_email, recipient_list)
+            # Clear the user's cart
+            user_cart.order_items.clear()
 
-        # Optionally, you can display a success message to the user
-        messages.success(request, 'Your order has been placed successfully.')
+            # Send a confirmation email to the customer
+            subject = 'Order Confirmation'
+            message = 'Thank you for your order! Your order has been received and will be processed shortly.'
+            from_email = 'your_email@example.com'  # Replace with your email address
+            recipient_list = [email]  # Use the customer's email address
+            send_mail(subject, message, from_email, recipient_list)
 
-        # Redirect the user to a thank-you page or another relevant page
-        return redirect('home')
+            # Optionally, you can display a success message to the user
+            messages.success(request, 'Your order has been placed successfully.')
+
+            # Redirect the user to a thank-you page or another relevant page
+            return redirect('process_order.html')
+        except ObjectDoesNotExist as e:
+            # Handle the case where an object does not exist (e.g., user's cart)
+            messages.error(request, 'An error occurred while processing your order.')
+            return render(request, 'checkout.html')
+        except Exception as e:
+            # Handle other exceptions as needed
+            messages.error(request, 'An error occurred while processing your order.')
+            return render(request, 'checkout.html')
+
     else:
         # Handle GET requests or invalid form submissions
         return render(request, 'checkout.html')
+
