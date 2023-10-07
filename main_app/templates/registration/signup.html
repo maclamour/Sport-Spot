@@ -33,13 +33,11 @@
     <br>
     {% endif %}
     
-    {% with request.user.customer as user_customer %}
-        {% if user_customer %}
-            {{ form.user_profile.name.label_tag }}
-            {{ form.user_profile.name }}
-            <br>
-        {% endif %}
-    {% endwith %}
+    {% if request.user.is_anonymous %}
+    {{ form.customer.name.label_tag }}
+    {{ form.customer.name }}
+    <br>
+    {% endif %}
     
     <input type="submit" class="btn" value="Sign Up" />
     <input type="hidden" name="next" value="{{ next }}" />
