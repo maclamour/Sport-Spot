@@ -109,7 +109,7 @@ def add_to_cart(request, product_id):
 
 
 
-def update_cart(request, item_id, new_quantity):
+def update_cart( item_id, new_quantity):
     try:
         cart_item = OrderItem.objects.get(pk=item_id)
         cart_item.quantity = new_quantity
@@ -237,7 +237,7 @@ def process_order(request):
             messages.success(request, 'Your order has been placed successfully.')
 
             # Redirect the user to a thank-you page or another relevant page
-            return redirect('process_order.html')
+            return redirect('home.html')
         except ObjectDoesNotExist as e:
             # Handle the case where an object does not exist (e.g., user's cart)
             messages.error(request, 'An error occurred while processing your order.')

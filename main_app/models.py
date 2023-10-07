@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -54,26 +55,30 @@ class CartManager(models.Manager):
     def get_cart_for_user(self, user):
         return self.get(user=user)
 
+
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_items = models.ManyToManyField('OrderItem', related_name='carts')
+    created_at = models.DateTimeField(default=timezone.now)  # Import timezone from django.utils
 
-    # Define a custom manager
-    objects = CartManager()
-
+    
     def __str__(self):
         return f"Cart for {self.user.username}"
 
     def total_price(self):
-        return sum(item.total_price() for item in self.order_items.all())
-    
+        return sum(item.total_price() for item in self.cartitem_set.all())
+
+from django.db import models
+from django.conf import settings  # Import the settings module
+
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    # Add any additional fields you need, e.g., selected options or custom fields
+    created_at = models.DateTimeField(default=timezone.now)
+    cart = models.ForeignKey(Cart, on_delete=models.SET_DEFAULT, default=1)  # Use SET_DEFAULT to specify the default cart
 
     def __str__(self):
         return f"CartItem for {self.product.name}"
 
     def total_price(self):
         return self.product.price * self.quantity
+
