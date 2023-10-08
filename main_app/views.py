@@ -10,7 +10,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .models import Product, Order, OrderItem, Cart
+from .models import Product, Order, OrderItem, Cart, Customer
 from django.core.exceptions import ObjectDoesNotExist
 
 class Home(TemplateView):
@@ -56,6 +56,7 @@ class StoreDelete(DeleteView):
     template_name = 'store_delete_confirmation.html'
     success_url = '/stores'
 
+
 class Signup(View):
     def get(self, request):
         form = UserCreationForm()
@@ -66,6 +67,11 @@ class Signup(View):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+
+            # Create a Customer object for the user
+            customer = Customer.objects.create(user=user)
+
+            # Log the user in
             login(request, user)
             return redirect(reverse("login"))  # Redirect to the 'login' URL name
         else:
@@ -135,8 +141,15 @@ class CheckoutView(View):
     template_name = "checkout.html"
 
     def get(self, request):
+        try:
+            # Ensure that the user has an associated Customer object
+            customer = request.user.customer
+        except ObjectDoesNotExist:
+            # Handle the case where the user doesn't have a Customer object
+            messages.error(request, 'User has no customer.')
+            return redirect('home')  # Redirect to an appropriate page
+
         # Retrieve the user's cart and associated items
-        customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed_order=False)
         cartitems = order.orderitem_set.all()
 
