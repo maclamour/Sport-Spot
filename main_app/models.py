@@ -67,8 +67,6 @@ class Cart(models.Model):
     def total_price(self):
         return sum(item.total_price() for item in self.cartitem_set.all())
 
-from django.db import models
-from django.conf import settings  # Import the settings module
 
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

@@ -2,7 +2,8 @@
 
 Heroku Link: 
 
-https://sport-spot24.herokuapp.com/
+https://sport-spot1-211d25317224.herokuapp.com/
+
 
 Sport Spot is a e-commerce store that will allow users to view and purchase different sports products that are available in the store. This website gives customers the opportunity to see all their favorite sports products that are available at the time.
 
@@ -34,6 +35,7 @@ Future Features:
 
 Technology Used:
 - Django
+-JavaScript 
 - Python 
 - Bootstrap
 - Heroku 
